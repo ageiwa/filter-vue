@@ -4,3 +4,8 @@
   font-family: sans-serif;
   box-sizing: border-box;
 }
+
+#app {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+}
