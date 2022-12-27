@@ -13,10 +13,10 @@
     function toggle() {
         isActive.value = !isActive.value
 
-        // emit('toggle', {
-        //     id: props.id,
-        //     active: isActive.value
-        // })
+        emit('toggle', {
+            id: props.id,
+            active: isActive.value
+        })
     }
 </script>
 
