@@ -7,8 +7,16 @@
 
     onMounted(() => {
         sendRequest('server/tags.json').then(data => {
-            data.unshift({id: 0, name: 'Все'})
-            tags.value = data
+
+            tags.value = data.map((item) => {
+                return {
+                    id: item.id, 
+                    name: item.name,
+                    active: false
+                }
+            })
+
+            tags.value.unshift({id: 0, name: 'Все', active: true})
         })
     })
 
