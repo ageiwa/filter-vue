@@ -5,7 +5,7 @@
     import Tag from '../Tag/Tag.vue'
 
     const state = reactive({
-        tags: []
+        tags: useTagsStore().tags
     })
 
     onMounted(() => {
@@ -20,6 +20,8 @@
             })
 
             state.tags.unshift({id: 0, name: 'Все', active: true})
+
+            useTagsStore().change(state.tags)
         })
     })
 
@@ -35,17 +37,6 @@
         })
 
         useTagsStore().change(state.tags)
-
-        // sendRequest('server/posts.json').then(data => {
-        //     tags.value.forEach((itemI) => {
-        //         if (itemI.active) {
-        //             const filterPosts = data.filter((itemJ) => itemI.id === itemJ.tag)
-                    
-        //             selectedPosts.push(...filterPosts)
-        //             posts.value = selectedPosts
-        //         }
-        //     })
-        // })
     }
 
 </script>

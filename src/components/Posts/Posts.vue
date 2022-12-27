@@ -13,7 +13,10 @@
 
     watch(tagStore, () => {
         sendRequest('server/posts.json').then(data => {
-            posts.value = filteredPosts(data)
+            if (tagStore.tags[0].active) {
+                posts.value = data
+            }
+            else posts.value = filteredPosts(data)
         })
     })
 
