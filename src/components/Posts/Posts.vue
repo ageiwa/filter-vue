@@ -12,27 +12,31 @@
     })
 
     watch(tagStore, () => {
-
         sendRequest('server/posts.json').then(data => {
-            const filterPosts = []
+            posts.value = filteredPosts(data)
+        })
+    })
 
-            tagStore.tags.forEach((itemI) => {
+    function filteredPosts(data) {
+        const filterPosts = []
 
-                if (itemI.active) {
+        tagStore.tags.forEach((itemI) => {
+            if (itemI.active) {
 
-                    data.forEach((itemJ) => {
-                        for (let i = 0; i < itemJ.tag.length; i++) {
-                            if (itemI.id === itemJ.tag[i]) filterPosts.push(itemJ) 
-                        }
-                    })
-                }
-
-            })
-
-            posts.value = filterPosts
+                data.forEach((itemJ) => {
+                    for (let i = 0; i < itemJ.tag.length; i++) {
+                        if (itemI.id === itemJ.tag[i]) filterPosts.push(itemJ)
+                    }
+                })
+            }
         })
 
-    })
+        return removeSome(filterPosts)
+    }
+
+    function removeSome(filterPosts) {
+        return [...new Set(filterPosts)]
+    }
 </script>
 
 <template>
