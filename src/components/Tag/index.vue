@@ -1,6 +1,7 @@
 <script setup>
     import { ref } from 'vue'
 
+    const emit = defineEmits(['toggle'])
     const props = defineProps({
         id: Number,
         name: String,
@@ -11,6 +12,11 @@
 
     function toggle(e) {
         isActive.value = !isActive.value
+
+        emit('toggle', {
+            id: props.id,
+            active: isActive.value
+        })
     }
 </script>
 

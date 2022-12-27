@@ -14,6 +14,10 @@
     sendRequest('server/posts.json').then(data => posts.value = data)
     sendRequest('server/tags.json').then(data => tags.value = data)
 
+    function toggleTag(value) {
+        console.log(value)
+    }
+
 </script>
 
 <template>
@@ -31,9 +35,10 @@
         <div class="container">
             <Tag
                 v-for="tag in tags"
-                :id:="tag.id"
+                :id="tag.id"
                 :name="tag.name"
                 :active="tag.active"
+                @toggle="toggleTag"
             />
         </div>
     </div>
