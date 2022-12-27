@@ -31,7 +31,9 @@
         <div class="container">
             <Tag
                 v-for="tag in tags"
+                :id:="tag.id"
                 :name="tag.name"
+                :active="tag.active"
             />
         </div>
     </div>

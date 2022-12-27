@@ -2,20 +2,22 @@
     import { ref } from 'vue'
 
     const props = defineProps({
-        name: String
+        id: Number,
+        name: String,
+        active: Boolean
     })
 
-    const active = ref('')
+    const isActive = ref(props.active)
 
-    function toggle() {
-        active.value = active.value === 'tag_active' ? '' : 'tag_active'
+    function toggle(e) {
+        isActive.value = !isActive.value
     }
 </script>
 
 <template>
-    <div :class="['tag', active]" @click="toggle">
+    <div :class="{'tag': true, 'tag_active': isActive}" @click="toggle">
         <p class="tag__title">{{ name }}</p>
-        <div v-if="active" class="tag__btn">
+        <div v-if="isActive" class="tag__btn">
             <img class="btn__icon" src="./cancel.svg" alt="close">
         </div>
     </div>
