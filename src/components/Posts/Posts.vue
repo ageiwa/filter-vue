@@ -1,7 +1,7 @@
 <script setup>
     import { onMounted, ref, watch, reactive } from 'vue'
     import { sendRequest } from '../../requests/request.js'
-    import { useTagsStore } from '../../stores/tagsStore';
+    import { useTagsStore } from '../../stores/tagsStore.js';
     import Post from '../Post/Post.vue'
 
     const tagStore = reactive(useTagsStore().state)

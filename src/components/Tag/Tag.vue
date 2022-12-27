@@ -1,5 +1,5 @@
 <script setup>
-    import { ref } from 'vue'
+    import { reactive } from 'vue'
 
     const emit = defineEmits(['toggle'])
     const props = defineProps({
@@ -8,22 +8,24 @@
         active: Boolean
     })
 
-    const isActive = ref(props.active)
+    // const state = reactive({
+    //     isActive: props.active
+    // })
 
     function toggle() {
-        isActive.value = !isActive.value
+        // state.isActive = !state.isActive
 
         emit('toggle', {
             id: props.id,
-            active: isActive.value
+            active: !props.active
         })
     }
 </script>
 
 <template>
-    <div :class="{'tag': true, 'tag_active': isActive}" @click="toggle">
-        <p class="tag__title">{{ name }}</p>
-        <div v-if="isActive" class="tag__btn">
+    <div :class="{'tag': true, 'tag_active': props.active}" @click="toggle">
+        <p class="tag__title">{{ props.name }}</p>
+        <div v-if="props.active" class="tag__btn">
             <img class="btn__icon" src="./cancel.svg" alt="close">
         </div>
     </div>

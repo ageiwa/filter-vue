@@ -4,11 +4,11 @@
     import { useTagsStore } from '../../stores/tagsStore.js'
     import Tag from '../Tag/Tag.vue'
 
-    const tags = reactive(useTagsStore().state)
+    const state = reactive(useTagsStore().state)
 
     onMounted(() => {
         sendRequest('server/tags.json').then(data => {
-            tags.state = data.map((item) => {
+            state.tags = data.map((item) => {
                 return {
                     id: item.id, 
                     name: item.name,
@@ -16,14 +16,14 @@
                 }
             })
 
-            tags.state.unshift({id: 0, name: 'Все', active: true})
+            state.tags.unshift({id: 0, name: 'Все', active: true})
 
-            useTagsStore().change(tags.state)
+            useTagsStore().change(state.tags)
         })
     })
 
     function toggleTag(value) {
-        tags.state = tags.state.map((item) => {
+        state.tags = state.tags.map((item) => {
             if (value.id === item.id) {
                 return {id: item.id, name: item.name, active: value.active}
             }
@@ -31,8 +31,10 @@
                 return {id: item.id, name: item.name, active: item.active}
             }
         })
+            
+        console.log(state.tags)
 
-        useTagsStore().change(tags.state)
+        useTagsStore().change(state.tags)
     }
 
 </script>
@@ -43,10 +45,11 @@
         <div class="container">
 
             <Tag
-                v-for="tag in tags.state"
+                v-for="tag in state.tags"
                 :id="tag.id"
                 :name="tag.name"
                 :active="tag.active"
+                :key="tag.active"
                 @toggle="toggleTag"
             />
 
