@@ -2,14 +2,18 @@
     import { ref } from 'vue'
     import SearchPanel from './components/SearchPanel/index.vue'
     import Post from './components/Post/index.vue'
+    import Tag from './components/Tag/index.vue'
 
     const posts = ref([])
+    const tags = ref([])
 
-    const request = fetch('server/posts.json').then(response => {
-        return response.json()
-    })
+    function sendRequest(url) {
+        return fetch(url).then(response => response.json())
+    }
 
-    request.then(data => posts.value = data)
+    sendRequest('server/posts.json').then(data => posts.value = data)
+    sendRequest('server/tags.json').then(data => tags.value = data)
+
 </script>
 
 <template>
@@ -23,10 +27,17 @@
             />
         </section>
     </div>
-    <div class="tags"></div>
+    <div class="tags">
+        <div class="container">
+            <Tag
+                v-for="tag in tags"
+                :name="tag.name"
+            />
+        </div>
+    </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
     .posts {
         border: 1px solid #4f2b9d;
         padding: 10px;
@@ -37,5 +48,11 @@
 
     .tags {
         border: 1px solid #9d2b2b;
+        flex-wrap: wrap;
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+        }
     }
 </style>
