@@ -10,7 +10,7 @@
 
     const isActive = ref(props.active)
 
-    function toggle(e) {
+    function toggle() {
         isActive.value = !isActive.value
 
         emit('toggle', {
