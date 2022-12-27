@@ -1,5 +1,5 @@
 <script setup>
-    import { ref } from 'vue'
+    import { onMounted, ref } from 'vue'
     import SearchPanel from './components/SearchPanel/index.vue'
     import Post from './components/Post/index.vue'
     import Tag from './components/Tag/index.vue'
@@ -11,11 +11,28 @@
         return fetch(url).then(response => response.json())
     }
 
-    sendRequest('server/posts.json').then(data => posts.value = data)
-    sendRequest('server/tags.json').then(data => tags.value = data)
+    onMounted(() => {
+        sendRequest('server/posts.json').then(data => posts.value = data)
+        sendRequest('server/tags.json').then(data => tags.value = data)
+    })
 
     function toggleTag(value) {
-        console.log(value)
+        const selectedPosts = []
+
+        tags.value.map((item) => {
+            if (item.id === value.id) item.active = value.active
+        })
+
+        sendRequest('server/posts.json').then(data => {
+            tags.value.forEach((itemI) => {
+                if (itemI.active) {
+                    const filterPosts = data.filter((itemJ) => itemI.id === itemJ.tag)
+                    
+                    selectedPosts.push(...filterPosts)
+                    posts.value = selectedPosts
+                }
+            })
+        })
     }
 
 </script>
