@@ -6,7 +6,13 @@
     import Post from '../Post/Post.vue'
 
     const searchStore = useSearchStore()
-    const tagStore = reactive(useTagsStore().state)
+    const state = reactive({
+        activeTags: useTagsStore().state
+    })
+
+    // watch(state.activeTags, () => {
+    //     console.log(state.activeTags)
+    // })
     
     const posts = ref([])
 
@@ -14,37 +20,37 @@
         sendRequest('server/posts.json').then(data => posts.value = data)
     })
 
-    watch(tagStore, () => {
-        sendRequest('server/posts.json').then(data => {
-            if (tagStore.tags[0].active) {
-                posts.value = data
-            }
-            else posts.value = filteredPosts(data)
-        })
-    })
+    // watch(tagStore, () => {
+    //     sendRequest('server/posts.json').then(data => {
+    //         if (tagStore.tags[0].active) {
+    //             posts.value = data
+    //         }
+    //         else posts.value = filteredPosts(data)
+    //     })
+    // })
 
-    watch(searchStore, () => {
-        posts.value = searchingPosts(posts.value)
-    })
+    // watch(searchStore, () => {
+    //     posts.value = searchingPosts(posts.value)
+    // })
 
-    function searchingPosts(posts) {
-        const searchingPosts = []
+    // function searchingPosts(posts) {
+    //     const searchingPosts = []
 
-        posts.forEach((item) => {
-            let counter = 0
+    //     posts.forEach((item) => {
+    //         let counter = 0
             
-            for (let i = 0; i < searchStore.search.length; i++) {
-                if (item.name[i].toLowerCase() === searchStore.search[i].toLowerCase()) {
-                    counter++
-                }
-                if (counter === searchStore.search.length) {
-                    searchingPosts.push(item)
-                }
-            }
-        })
+    //         for (let i = 0; i < searchStore.search.length; i++) {
+    //             if (item.name[i].toLowerCase() === searchStore.search[i].toLowerCase()) {
+    //                 counter++
+    //             }
+    //             if (counter === searchStore.search.length) {
+    //                 searchingPosts.push(item)
+    //             }
+    //         }
+    //     })
 
-        return removeSome(searchingPosts)
-    }
+    //     return removeSome(searchingPosts)
+    // }
 
     function filteredPosts(data) {
         const filterPosts = []

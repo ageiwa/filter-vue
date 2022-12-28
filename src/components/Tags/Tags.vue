@@ -22,7 +22,7 @@
             state.tags.unshift({id: 0, name: 'Все', active: true})
             state.activeTags.unshift({id: 0, name: 'Все', active: true})
 
-            useTagsStore().change(state.tags)
+            useTagsStore().change(state.activeTags)
         })
     })
 
@@ -33,7 +33,9 @@
         tags[value.id].active = !tags[value.id].active
 
         activeTags.push(tags[value.id])
-        activeTags = activeTags.filter((item) => value.id === 0 && value.active ? item.id === 0 : item.id !== 0)
+        activeTags = activeTags.filter((item) => {
+            return value.id !== 0 ? item.id !== 0 && item.active : item.id === 0 && item.active
+        })
 
         if (activeTags.length === 0) {
             tags[0].active = true
@@ -51,6 +53,8 @@
 
         state.tags = tags
         state.activeTags = activeTags
+
+        useTagsStore().change(state.activeTags)
     }
 
 </script>
