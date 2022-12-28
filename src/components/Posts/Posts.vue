@@ -11,24 +11,19 @@
     })
     
     const posts = ref([])
-    const findsPosts = ref([])
 
     onMounted(() => {
         sendRequest('server/posts.json').then(data => posts.value = data)
     })
 
-    watch(state.activeTags, () => {
+    watch(state.activeTags, () => callToUpdate())
+    watch(searchStore, () => callToUpdate())
+
+    function callToUpdate() {
         sendRequest('server/posts.json').then(data => {
-            if (state.activeTags.tags[0].id === 0 && searchStore.search !== '') {
-                findsPosts.value = searchingPosts(posts.value)
-            }
-            else if (state.activeTags.tags[0].id === 0) {
-                posts.value = data
-            }
-            else if (searchStore.search !== '') findsPosts.value = filteredPosts(data)
-            else posts.value = filteredPosts(data)
+            posts.value = filteredPosts(data)
         })
-    })
+    }
 
     function filteredPosts(data) {
         const activeTags = state.activeTags.tags.map(item => item)
@@ -36,28 +31,27 @@
         let posts = []
         let save = []
 
-        activeTags.forEach(tag => {
+        if (state.activeTags.tags[0].id !== 0) {
+            activeTags.forEach(tag => {
 
             save = data.filter(dataItem => {
                 let index = dataItem.tag.indexOf(tag.id)
 
-                if (index !== -1) {
-                    dataItem.tag = [true]
-                    return true
-                }
-                else return false
-            })
+                    if (index !== -1) {
+                        dataItem.tag = [true]
+                        return true
+                    }
+                    else return false
+                })
 
-            posts.push(...save)
-        })
+                posts.push(...save)
+            })
+        }
+        else posts = data
 
         if (searchStore.search !== '') return searchingPosts(posts)
         return posts
     }
-
-    watch(searchStore, () => {
-        findsPosts.value = searchingPosts(posts.value)
-    })
 
     function searchingPosts(data) {
         const search = searchStore.search
@@ -75,14 +69,6 @@
 <template>
     <section class="posts">
         <Post
-            v-if="searchStore.search !== ''"
-            v-for="fpost in findsPosts"
-            :name="fpost.name"
-            :desc="fpost.desc"
-        />
-
-        <Post
-            v-else
             v-for="post in posts"
             :name="post.name"
             :desc="post.desc"
