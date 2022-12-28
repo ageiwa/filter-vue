@@ -7,8 +7,8 @@
 
 <template>
     <article class="post">
-        <h2>{{ name }}</h2>
-        <p>{{ desc }}</p>
+        <h2 class="post__header">{{ name }}</h2>
+        <p class="post__desc">{{ desc }}</p>
     </article>
 </template>
 
