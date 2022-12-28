@@ -2,9 +2,12 @@
     import { onMounted, ref, watch, reactive } from 'vue'
     import { sendRequest } from '../../requests/request.js'
     import { useTagsStore } from '../../stores/tagsStore.js';
+    import { useSearchStore } from '../../stores/searchStore.js';
     import Post from '../Post/Post.vue'
 
+    const searchStore = useSearchStore()
     const tagStore = reactive(useTagsStore().state)
+
     const posts = ref([])
 
     onMounted(() => {
@@ -20,7 +23,39 @@
         })
     })
 
+    watch(searchStore, () => {
+        sendRequest('server/posts.json').then(data => {
+            if (tagStore.tags[0].active) {
+                posts.value = data
+
+                if (searchStore.search !== '') posts.value = searchingPosts(posts.value)
+            }
+            else posts.value = filteredPosts(data)
+        })
+    })
+
+    function searchingPosts(posts) {
+        const searchingPosts = []
+
+        posts.forEach((item) => {
+            let counter = 0
+            
+            for (let i = 0; i < searchStore.search.length; i++) {
+                if (item.name[i].toLowerCase() === searchStore.search[i].toLowerCase()) {
+                    counter++
+                }
+                if (counter === searchStore.search.length) {
+                    searchingPosts.push(item)
+                }
+            }
+        })
+
+        return removeSome(searchingPosts)
+    }
+
     function filteredPosts(data) {
+        console.log(searchStore.search)
+
         const filterPosts = []
 
         tagStore.tags.forEach((itemI) => {

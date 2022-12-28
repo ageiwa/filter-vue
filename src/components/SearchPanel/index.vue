@@ -1,12 +1,17 @@
 <script setup>
-    import { ref } from 'vue';
+    import { ref } from 'vue'
+    import { useSearchStore } from '../../stores/searchStore.js'
 
-    const search = ref('')
+    const searchStore = useSearchStore()
+
+    function onInput(e) {
+        searchStore.change(e.target.value)
+    }
 </script>
 
 <template>
     <div class="search-panel">
-        <input v-model="search" class="search-panel__input" type="text" placeholder="Начните вводить название">
+        <input @input="onInput" class="search-panel__input" type="text" placeholder="Начните вводить название">
     </div>
 </template>
 
