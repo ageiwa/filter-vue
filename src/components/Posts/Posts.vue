@@ -11,6 +11,7 @@
     })
     
     const posts = ref([])
+    const findsPosts = ref([])
 
     onMounted(() => {
         sendRequest('server/posts.json').then(data => posts.value = data)
@@ -18,9 +19,13 @@
 
     watch(state.activeTags, () => {
         sendRequest('server/posts.json').then(data => {
-            if (state.activeTags.tags[0].id === 0) {
+            if (state.activeTags.tags[0].id === 0 && searchStore.search !== '') {
+                findsPosts.value = searchingPosts(posts.value)
+            }
+            else if (state.activeTags.tags[0].id === 0) {
                 posts.value = data
             }
+            else if (searchStore.search !== '') findsPosts.value = filteredPosts(data)
             else posts.value = filteredPosts(data)
         })
     })
@@ -46,68 +51,38 @@
             posts.push(...save)
         })
 
+        if (searchStore.search !== '') return searchingPosts(posts)
         return posts
     }
 
+    watch(searchStore, () => {
+        findsPosts.value = searchingPosts(posts.value)
+    })
 
+    function searchingPosts(data) {
+        const search = searchStore.search
+        let save = []
 
-    // watch(tagStore, () => {
-    //     sendRequest('server/posts.json').then(data => {
-    //         if (tagStore.tags[0].active) {
-    //             posts.value = data
-    //         }
-    //         else posts.value = filteredPosts(data)
-    //     })
-    // })
+        if (search === '') return data
 
-    // watch(searchStore, () => {
-    //     posts.value = searchingPosts(posts.value)
-    // })
+        save = data.filter(dataItem => dataItem.name.includes(search))
 
-    // function searchingPosts(posts) {
-    //     const searchingPosts = []
+        return save
+    }
 
-    //     posts.forEach((item) => {
-    //         let counter = 0
-            
-    //         for (let i = 0; i < searchStore.search.length; i++) {
-    //             if (item.name[i].toLowerCase() === searchStore.search[i].toLowerCase()) {
-    //                 counter++
-    //             }
-    //             if (counter === searchStore.search.length) {
-    //                 searchingPosts.push(item)
-    //             }
-    //         }
-    //     })
-
-    //     return removeSome(searchingPosts)
-    // }
-
-    // function filteredPosts(data) {
-    //     const filterPosts = []
-
-    //     tagStore.tags.forEach((itemI) => {
-    //         if (itemI.active) {
-
-    //             data.forEach((itemJ) => {
-    //                 for (let i = 0; i < itemJ.tag.length; i++) {
-    //                     if (itemI.id === itemJ.tag[i]) filterPosts.push(itemJ)
-    //                 }
-    //             })
-    //         }
-    //     })
-
-    //     return removeSome(filterPosts)
-    // }
-
-    // function removeSome(filterPosts) {
-    //     return [...new Set(filterPosts)]
-    // }
 </script>
 
 <template>
     <section class="posts">
         <Post
+            v-if="searchStore.search !== ''"
+            v-for="fpost in findsPosts"
+            :name="fpost.name"
+            :desc="fpost.desc"
+        />
+
+        <Post
+            v-else
             v-for="post in posts"
             :name="post.name"
             :desc="post.desc"
