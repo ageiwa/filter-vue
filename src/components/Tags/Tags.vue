@@ -5,7 +5,8 @@
     import Tag from '../Tag/Tag.vue'
 
     const state = reactive({
-        tags: []
+        tags: [],
+        activeTags: []
     })
 
     onMounted(() => {
@@ -19,38 +20,37 @@
             })
 
             state.tags.unshift({id: 0, name: 'Все', active: true})
+            state.activeTags.unshift({id: 0, name: 'Все', active: true})
 
             useTagsStore().change(state.tags)
         })
     })
 
     function toggleTag(value) {
+        let tags = state.tags.map((item) => item)
+        let activeTags = state.activeTags.map((item) => item)
 
-        if (value.id === 0 && value.active) {
-            state.tags[value.id].active = true
+        tags[value.id].active = !tags[value.id].active
 
-            state.tags.forEach((item) => {
-                if (item.id !== value.id) item.active = false
-            })
+        activeTags.push(tags[value.id])
+        activeTags = activeTags.filter((item) => value.id === 0 && value.active ? item.id === 0 : item.id !== 0)
+
+        if (activeTags.length === 0) {
+            tags[0].active = true
+            activeTags.push(tags[0])
         }
-        else if (value.active) {
-            state.tags[0].active = false
 
-            state.tags.forEach((item) => {
-                if (item.id === value.id) item.active = true
-            })
-        }
-        else {
-            let counter = 0
+        mergeTags(tags, activeTags)
+    }
 
-            state.tags[value.id].active = false
+    function mergeTags(tags, activeTags) {
+        tags = tags.map(item => {
+            item = {id: item.id, name: item.name, active: false}
+            return activeTags.find(itemActive => item.id === itemActive.id) || item
+        })
 
-            state.tags.forEach((item) => {
-                if (!item.active) counter++
-            })
-
-            if (counter === state.tags.length) state.tags[0].active = true
-        }
+        state.tags = tags
+        state.activeTags = activeTags
     }
 
 </script>
