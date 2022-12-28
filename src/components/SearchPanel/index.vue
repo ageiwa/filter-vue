@@ -1,10 +1,12 @@
 <script setup>
+    import { ref } from 'vue';
 
+    const search = ref('')
 </script>
 
 <template>
     <div class="search-panel">
-        <input class="search-panel__input" type="text" placeholder="Начните вводить название">
+        <input v-model="search" class="search-panel__input" type="text" placeholder="Начните вводить название">
     </div>
 </template>
 
