@@ -9,16 +9,44 @@
     const state = reactive({
         activeTags: useTagsStore().state
     })
-
-    // watch(state.activeTags, () => {
-    //     console.log(state.activeTags)
-    // })
     
     const posts = ref([])
 
     onMounted(() => {
         sendRequest('server/posts.json').then(data => posts.value = data)
     })
+
+    watch(state.activeTags, () => {
+        // console.log(state.activeTags)
+
+        sendRequest('server/posts.json').then(data => {
+            posts.value = filteredPosts(data)
+        })
+    })
+
+    function filteredPosts(data) {
+        const activeTags = state.activeTags.tags.map(item => item)
+
+        let posts = []
+        let save = []
+
+        activeTags.forEach(tag => {
+
+            save = data.filter(dataItem => {
+                let index = dataItem.tag.indexOf(tag.id)
+
+                if (index !== -1) {
+                    dataItem.tag = [true]
+                    return true
+                }
+                else return false
+            })
+
+            posts.push(...save)
+        })
+
+        return posts
+    }
 
     // watch(tagStore, () => {
     //     sendRequest('server/posts.json').then(data => {
@@ -52,26 +80,26 @@
     //     return removeSome(searchingPosts)
     // }
 
-    function filteredPosts(data) {
-        const filterPosts = []
+    // function filteredPosts(data) {
+    //     const filterPosts = []
 
-        tagStore.tags.forEach((itemI) => {
-            if (itemI.active) {
+    //     tagStore.tags.forEach((itemI) => {
+    //         if (itemI.active) {
 
-                data.forEach((itemJ) => {
-                    for (let i = 0; i < itemJ.tag.length; i++) {
-                        if (itemI.id === itemJ.tag[i]) filterPosts.push(itemJ)
-                    }
-                })
-            }
-        })
+    //             data.forEach((itemJ) => {
+    //                 for (let i = 0; i < itemJ.tag.length; i++) {
+    //                     if (itemI.id === itemJ.tag[i]) filterPosts.push(itemJ)
+    //                 }
+    //             })
+    //         }
+    //     })
 
-        return removeSome(filterPosts)
-    }
+    //     return removeSome(filterPosts)
+    // }
 
-    function removeSome(filterPosts) {
-        return [...new Set(filterPosts)]
-    }
+    // function removeSome(filterPosts) {
+    //     return [...new Set(filterPosts)]
+    // }
 </script>
 
 <template>
