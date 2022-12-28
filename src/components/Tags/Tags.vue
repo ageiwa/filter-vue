@@ -4,7 +4,9 @@
     import { useTagsStore } from '../../stores/tagsStore.js'
     import Tag from '../Tag/Tag.vue'
 
-    const state = reactive(useTagsStore().state)
+    const state = reactive({
+        tags: []
+    })
 
     onMounted(() => {
         sendRequest('server/tags.json').then(data => {
@@ -23,18 +25,32 @@
     })
 
     function toggleTag(value) {
-        state.tags = state.tags.map((item) => {
-            if (value.id === item.id) {
-                return {id: item.id, name: item.name, active: value.active}
-            }
-            else {
-                return {id: item.id, name: item.name, active: item.active}
-            }
-        })
-            
-        console.log(state.tags)
 
-        useTagsStore().change(state.tags)
+        if (value.id === 0 && value.active) {
+            state.tags[value.id].active = true
+
+            state.tags.forEach((item) => {
+                if (item.id !== value.id) item.active = false
+            })
+        }
+        else if (value.active) {
+            state.tags[0].active = false
+
+            state.tags.forEach((item) => {
+                if (item.id === value.id) item.active = true
+            })
+        }
+        else {
+            let counter = 0
+
+            state.tags[value.id].active = false
+
+            state.tags.forEach((item) => {
+                if (!item.active) counter++
+            })
+
+            if (counter === state.tags.length) state.tags[0].active = true
+        }
     }
 
 </script>
@@ -49,7 +65,6 @@
                 :id="tag.id"
                 :name="tag.name"
                 :active="tag.active"
-                :key="tag.active"
                 @toggle="toggleTag"
             />
 

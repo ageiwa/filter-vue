@@ -6,7 +6,6 @@ export const useTagsStore = defineStore('tags', () => {
         tags: []
     })
 
-    
     function change(value) {
         state.tags = value
     }

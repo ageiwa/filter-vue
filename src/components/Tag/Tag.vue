@@ -23,7 +23,7 @@
 </script>
 
 <template>
-    <div :class="{'tag': true, 'tag_active': props.active}" @click="toggle">
+    <div :class="{'tag': true, 'tag_active': props.active}" :id="props.id" @click="toggle">
         <p class="tag__title">{{ props.name }}</p>
         <div v-if="props.active" class="tag__btn">
             <img class="btn__icon" src="./cancel.svg" alt="close">
