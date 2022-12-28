@@ -17,10 +17,11 @@
     })
 
     watch(state.activeTags, () => {
-        // console.log(state.activeTags)
-
         sendRequest('server/posts.json').then(data => {
-            posts.value = filteredPosts(data)
+            if (state.activeTags.tags[0].id === 0) {
+                posts.value = data
+            }
+            else posts.value = filteredPosts(data)
         })
     })
 
@@ -47,6 +48,8 @@
 
         return posts
     }
+
+
 
     // watch(tagStore, () => {
     //     sendRequest('server/posts.json').then(data => {
