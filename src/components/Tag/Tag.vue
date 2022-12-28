@@ -1,6 +1,4 @@
 <script setup>
-    import { reactive } from 'vue'
-
     const emit = defineEmits(['toggle'])
     const props = defineProps({
         id: Number,
@@ -8,13 +6,7 @@
         active: Boolean
     })
 
-    // const state = reactive({
-    //     isActive: props.active
-    // })
-
     function toggle() {
-        // state.isActive = !state.isActive
-
         emit('toggle', {
             id: props.id,
             active: !props.active
