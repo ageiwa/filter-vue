@@ -16,13 +16,5 @@
 </template>
 
 <style scoped lang="scss">
-    .search-panel {
-        padding: 10px;
-        border: 1px solid #000;
-
-        .search-panel__input {
-            padding: 5px;
-            width: 100%;
-        }
-    }
+    @import './style.scss'
 </style>

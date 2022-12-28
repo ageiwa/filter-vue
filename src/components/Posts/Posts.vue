@@ -79,11 +79,5 @@
 </template>
 
 <style scoped lang="scss">
-    .posts {
-        border: 1px solid #4f2b9d;
-        padding: 10px;
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
-    }
+    @import './style.scss'
 </style>

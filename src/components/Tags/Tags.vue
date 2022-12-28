@@ -75,13 +75,5 @@
 </template>
 
 <style scoped lang="scss">
-    .tags {
-        border: 1px solid #9d2b2b;
-        flex-wrap: wrap;
-
-        .container {
-            display: flex;
-            flex-wrap: wrap;
-        }
-    }
+    @import './style.scss'
 </style>
