@@ -7,7 +7,7 @@
 
     const searchStore = useSearchStore()
     const tagStore = reactive(useTagsStore().state)
-
+    
     const posts = ref([])
 
     onMounted(() => {
@@ -24,14 +24,7 @@
     })
 
     watch(searchStore, () => {
-        sendRequest('server/posts.json').then(data => {
-            if (tagStore.tags[0].active) {
-                posts.value = data
-
-                if (searchStore.search !== '') posts.value = searchingPosts(posts.value)
-            }
-            else posts.value = filteredPosts(data)
-        })
+        posts.value = searchingPosts(posts.value)
     })
 
     function searchingPosts(posts) {
@@ -54,8 +47,6 @@
     }
 
     function filteredPosts(data) {
-        console.log(searchStore.search)
-
         const filterPosts = []
 
         tagStore.tags.forEach((itemI) => {
