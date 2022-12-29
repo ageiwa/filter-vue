@@ -4,9 +4,9 @@
     import { useTagsStore } from '../../stores/tagsStore.js';
     import { useSearchStore } from '../../stores/searchStore.js';
     import Post from '../Post/Post.vue'
-
-    const searchStore = useSearchStore()
+    
     const state = reactive({
+        searchStore: useSearchStore(),
         activeTags: useTagsStore().state
     })
     
@@ -16,17 +16,15 @@
         sendRequest('server/posts.json').then(data => posts.value = data)
     })
 
-    watch(state.activeTags, () => callToUpdate())
-    watch(searchStore, () => callToUpdate())
-
-    function callToUpdate() {
+    watch(state, () => {
         sendRequest('server/posts.json').then(data => {
             posts.value = filteredPosts(data)
         })
-    }
+    })
 
     function filteredPosts(data) {
         const activeTags = state.activeTags.tags.map(item => item)
+        const search = state.searchStore.search
 
         let posts = []
         let save = []
@@ -49,12 +47,12 @@
         }
         else posts = data
 
-        if (searchStore.search !== '') return searchingPosts(posts)
+        if (search !== '') return searchingPosts(posts)
         return posts
     }
 
     function searchingPosts(data) {
-        const search = searchStore.search
+        const search = state.searchStore.search
         let save = []
 
         if (search === '') return data
