@@ -27,22 +27,20 @@
         const search = state.searchStore.search
 
         let posts = []
-        let save = []
+        let filtering = []
 
         if (state.activeTags.tags[0].id !== 0) {
             activeTags.forEach(tag => {
 
-            save = data.filter(dataItem => {
-                let index = dataItem.tag.indexOf(tag.id)
-
-                    if (index !== -1) {
+                filtering = data.filter(dataItem => {
+                    if (dataItem.tag.indexOf(tag.id) !== -1) {
                         dataItem.tag = [true]
                         return true
                     }
                     else return false
                 })
 
-                posts.push(...save)
+                posts.push(...filtering)
             })
         }
         else posts = data
