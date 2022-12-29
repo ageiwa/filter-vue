@@ -6,8 +6,6 @@ export const useSearchStore = defineStore('search', () => {
 
     function change(value) {
         search.value = value
-
-        // console.log(search.value)
     }
 
     return { search, change }
