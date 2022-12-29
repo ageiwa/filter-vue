@@ -24,34 +24,5 @@
 </template>
 
 <style scoped lang="scss">
-    .tag {
-        margin: 5px;
-        border: 1px solid #000;
-        padding: 10px;
-        display: flex;
-        user-select: none;
-        cursor: pointer;
-
-        .tag__title {
-            white-space: nowrap;
-        }
-    }
-
-    .tag_active {
-        background-color: #000;
-        color: #fff;
-    }
-
-    .tag__btn {
-        width: 18px;
-        height: 18px;
-        margin-left: 5px;
-        border-radius: 50%;
-        background-color: #fff;
-
-        .btn__icon {
-            width: 100%;
-            height: 100%;
-        }
-    }
+    @import './style.scss'
 </style>

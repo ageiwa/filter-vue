@@ -4,9 +4,11 @@
     import { useTagsStore } from '../../stores/tagsStore.js';
     import { useSearchStore } from '../../stores/searchStore.js';
     import Post from '../Post/Post.vue'
-
-    const searchStore = useSearchStore()
-    const tagStore = reactive(useTagsStore().state)
+    
+    const state = reactive({
+        searchStore: useSearchStore(),
+        activeTags: useTagsStore().state
+    })
     
     const posts = ref([])
 
@@ -14,58 +16,52 @@
         sendRequest('server/posts.json').then(data => posts.value = data)
     })
 
-    watch(tagStore, () => {
+    watch(state, () => {
         sendRequest('server/posts.json').then(data => {
-            if (tagStore.tags[0].active) {
-                posts.value = data
-            }
-            else posts.value = filteredPosts(data)
+            posts.value = filteredPosts(data)
         })
     })
-
-    watch(searchStore, () => {
-        posts.value = searchingPosts(posts.value)
-    })
-
-    function searchingPosts(posts) {
-        const searchingPosts = []
-
-        posts.forEach((item) => {
-            let counter = 0
-            
-            for (let i = 0; i < searchStore.search.length; i++) {
-                if (item.name[i].toLowerCase() === searchStore.search[i].toLowerCase()) {
-                    counter++
-                }
-                if (counter === searchStore.search.length) {
-                    searchingPosts.push(item)
-                }
-            }
-        })
-
-        return removeSome(searchingPosts)
-    }
 
     function filteredPosts(data) {
-        const filterPosts = []
+        const activeTags = state.activeTags.tags.map(item => item)
+        const search = state.searchStore.search
 
-        tagStore.tags.forEach((itemI) => {
-            if (itemI.active) {
+        let posts = []
+        let save = []
 
-                data.forEach((itemJ) => {
-                    for (let i = 0; i < itemJ.tag.length; i++) {
-                        if (itemI.id === itemJ.tag[i]) filterPosts.push(itemJ)
+        if (state.activeTags.tags[0].id !== 0) {
+            activeTags.forEach(tag => {
+
+            save = data.filter(dataItem => {
+                let index = dataItem.tag.indexOf(tag.id)
+
+                    if (index !== -1) {
+                        dataItem.tag = [true]
+                        return true
                     }
+                    else return false
                 })
-            }
-        })
 
-        return removeSome(filterPosts)
+                posts.push(...save)
+            })
+        }
+        else posts = data
+
+        if (search !== '') return searchingPosts(posts)
+        return posts
     }
 
-    function removeSome(filterPosts) {
-        return [...new Set(filterPosts)]
+    function searchingPosts(data) {
+        const search = state.searchStore.search
+        let save = []
+
+        if (search === '') return data
+
+        save = data.filter(dataItem => dataItem.name.includes(search))
+
+        return save
     }
+
 </script>
 
 <template>
@@ -79,11 +75,5 @@
 </template>
 
 <style scoped lang="scss">
-    .posts {
-        border: 1px solid #4f2b9d;
-        padding: 10px;
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
-    }
+    @import './style.scss'
 </style>

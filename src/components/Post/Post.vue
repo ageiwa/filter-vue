@@ -7,19 +7,11 @@
 
 <template>
     <article class="post">
-        <h2>{{ name }}</h2>
-        <p>{{ desc }}</p>
+        <h2 class="post__header">{{ name }}</h2>
+        <p class="post__desc">{{ desc }}</p>
     </article>
 </template>
 
 <style scoped lang="scss">
-    .post {
-        border-radius: 5px;
-        border: 1px solid #000;
-        padding: 10px;
-        height: 160px;
-        overflow: hidden;
-        white-space: normal;
-        text-overflow: ellipsis;
-    }
+    @import './style.scss'
 </style>

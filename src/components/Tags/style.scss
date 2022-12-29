@@ -1,0 +1,9 @@
+.tags {
+    flex-wrap: wrap;
+
+    .container {
+        margin-top: 5px;
+        display: flex;
+        flex-wrap: wrap;
+    }
+}
