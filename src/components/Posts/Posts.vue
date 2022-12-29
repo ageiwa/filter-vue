@@ -23,14 +23,11 @@
     })
 
     function filteredPosts(data) {
-        const activeTags = state.activeTags.tags.map(item => item)
-        const search = state.searchStore.search
-
         let posts = []
         let filtering = []
 
         if (state.activeTags.tags[0].id !== 0) {
-            activeTags.forEach(tag => {
+            state.activeTags.tags.forEach(tag => {
 
                 filtering = data.filter(dataItem => {
                     if (dataItem.tag.indexOf(tag.id) !== -1) {
@@ -45,7 +42,7 @@
         }
         else posts = data
 
-        if (search !== '') return searchingPosts(posts)
+        if (state.searchStore.search !== '') return searchingPosts(posts)
         return posts
     }
 
@@ -55,7 +52,9 @@
 
         if (search === '') return data
 
-        filtering = data.filter(dataItem => dataItem.name.toLowerCase().includes(search))
+        filtering = data.filter(dataItem => {
+            return dataItem.name.toLowerCase().includes(search) || dataItem.desc.toLowerCase().includes(search)
+        })
 
         return filtering
     }
