@@ -18,7 +18,7 @@
     <div :class="{'tag': true, 'tag_active': props.active}" :id="props.id" @click="toggle">
         <p class="tag__title">{{ props.name }}</p>
         <div v-if="props.active" class="tag__btn">
-            <img class="btn__icon" src="./cancel.svg" alt="close">
+            <img class="btn__icon" src="@/assets/cancel.svg" alt="close">
         </div>
     </div>
 </template>
