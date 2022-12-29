@@ -50,12 +50,12 @@
     }
 
     function searchingPosts(data) {
-        const search = state.searchStore.search
+        const search = state.searchStore.search.toLowerCase()
         let save = []
 
         if (search === '') return data
 
-        save = data.filter(dataItem => dataItem.name.includes(search))
+        save = data.filter(dataItem => dataItem.name.toLowerCase().includes(search))
 
         return save
     }
