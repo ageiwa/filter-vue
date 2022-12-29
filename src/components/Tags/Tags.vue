@@ -39,7 +39,9 @@
             state.activeTags.push(state.tags[0])
         }
 
-        state.tags.forEach(tag => tag.active = false)
+        state.tags.forEach(tag => {
+            if (tag.active) tag.active = false
+        })
 
         state.activeTags.forEach(activeTag => {
             state.tags.find(tag => tag.id === activeTag.id).active = true
