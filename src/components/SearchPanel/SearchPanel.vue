@@ -1,5 +1,5 @@
 <script setup>
-    import { useSearchStore } from '../../stores/searchStore.js'
+    import { useSearchStore } from '@/stores/searchStore.js'
 
     const searchStore = useSearchStore()
 

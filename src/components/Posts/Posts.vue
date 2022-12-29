@@ -1,9 +1,9 @@
 <script setup>
     import { onMounted, ref, watch, reactive } from 'vue'
-    import { sendRequest } from '../../requests/request.js'
-    import { useTagsStore } from '../../stores/tagsStore.js';
-    import { useSearchStore } from '../../stores/searchStore.js';
-    import Post from '../Post/Post.vue'
+    import { sendRequest } from '@/requests/request.js'
+    import { useTagsStore } from '@/stores/tagsStore.js';
+    import { useSearchStore } from '@/stores/searchStore.js';
+    import Post from '@/components/Post/Post.vue'
     
     const state = reactive({
         searchStore: useSearchStore(),

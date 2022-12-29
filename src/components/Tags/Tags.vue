@@ -1,8 +1,8 @@
 <script setup>
     import { onMounted, reactive } from 'vue'
-    import { sendRequest } from '../../requests/request.js'
-    import { useTagsStore } from '../../stores/tagsStore.js'
-    import Tag from '../Tag/Tag.vue'
+    import { sendRequest } from '@/requests/request.js'
+    import { useTagsStore } from '@/stores/tagsStore.js'
+    import Tag from '@/components/Tag/Tag.vue'
 
     const state = reactive({
         tags: [],
