@@ -1,5 +1,4 @@
 <script setup>
-    import { ref } from 'vue'
     import { useSearchStore } from '../../stores/searchStore.js'
 
     const searchStore = useSearchStore()
