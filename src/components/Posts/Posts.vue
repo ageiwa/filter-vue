@@ -51,13 +51,13 @@
 
     function searchingPosts(data) {
         const search = state.searchStore.search.toLowerCase()
-        let save = []
+        let filtering = []
 
         if (search === '') return data
 
-        save = data.filter(dataItem => dataItem.name.toLowerCase().includes(search))
+        filtering = data.filter(dataItem => dataItem.name.toLowerCase().includes(search))
 
-        return save
+        return filtering
     }
 
 </script>
