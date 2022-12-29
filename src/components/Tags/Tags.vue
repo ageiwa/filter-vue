@@ -27,32 +27,23 @@
     })
 
     function toggleTag(value) {
-        let tags = state.tags.map((item) => item)
-        let activeTags = state.activeTags.map((item) => item)
+        state.tags[value.id].active = !state.tags[value.id].active
 
-        tags[value.id].active = !tags[value.id].active
-
-        activeTags.push(tags[value.id])
-        activeTags = activeTags.filter((item) => {
+        state.activeTags.push(state.tags[value.id])
+        state.activeTags = state.activeTags.filter((item) => {
             return value.id !== 0 ? item.id !== 0 && item.active : item.id === 0 && item.active
         })
 
-        if (activeTags.length === 0) {
-            tags[0].active = true
-            activeTags.push(tags[0])
+        if (state.activeTags.length === 0) {
+            state.tags[0].active = true
+            state.activeTags.push(state.tags[0])
         }
 
-        mergeTags(tags, activeTags)
-    }
+        state.tags.forEach(tag => tag.active = false)
 
-    function mergeTags(tags, activeTags) {
-        tags = tags.map(item => {
-            item = {id: item.id, name: item.name, active: false}
-            return activeTags.find(itemActive => item.id === itemActive.id) || item
+        state.activeTags.forEach(activeTag => {
+            state.tags.find(tag => tag.id === activeTag.id).active = true
         })
-
-        state.tags = tags
-        state.activeTags = activeTags
 
         useTagsStore().change(state.activeTags)
     }
