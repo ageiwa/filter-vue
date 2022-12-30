@@ -20,7 +20,7 @@
             })
 
             state.tags.unshift({id: 0, name: 'Все', active: true})
-            state.activeTags.unshift({id: 0, name: 'Все', active: true})
+            state.activeTags.push({id: 0, name: 'Все', active: true})
 
             useTagsStore().change(state.activeTags)
         })
